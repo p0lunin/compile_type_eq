@@ -18,11 +18,12 @@
 //!
 //! You can use a trait for checking of equality instead:
 //! ```rust
-//! use compile_type_eq::CompileEq;
+//! use compile_type_eq::*;
 //!
 //! fn do_some_when_not_eq<T, U, BecauseTypesMustBeNotEq>(t: T, u: U) -> String
 //! where
-//!     T: CompileEq<U, BecauseTypesMustBeNotEq>
+//!     T: CompileEq<U, BecauseTypesMustBeNotEq>,
+//!     BecauseTypesMustBeNotEq: CompileEqResult
 //! {
 //!     "Some".to_string()
 //! }
@@ -31,11 +32,12 @@
 //! ```
 //!
 //! ```compile_fail
-//! use compile_type_eq::CompileEq;
+//! use compile_type_eq::*;
 //!
 //! fn do_some_when_not_eq<T, U, BecauseTypesMustBeNotEq>(t: T, u: U) -> String
 //! where
-//!     T: CompileEq<U, BecauseTypesMustBeNotEq>
+//!     T: CompileEq<U, BecauseTypesMustBeNotEq>,
+//!     BecauseTypesMustBeNotEq: CompileEqResult
 //! {
 //!     "Some".to_string()
 //! }
@@ -43,15 +45,17 @@
 //! do_some_when_not_eq("a", "b");
 //! ```
 
-use crate::structs::{Eq, NotEq};
+pub use structs::{TypesEq, CompileEqResult};
 
 mod structs;
 
-/// Trait for compile-time equality checking
-pub trait CompileEq<U, Inf> {}
+use structs::TypesNotEq;
 
-impl<T> CompileEq<T, Eq> for T {}
-impl<T, U> CompileEq<U, NotEq> for T {}
+/// Trait for compile-time equality checking
+pub trait CompileEq<U, Result: CompileEqResult> {}
+
+impl<T> CompileEq<T, TypesEq> for T {}
+impl<T, U> CompileEq<U, TypesNotEq> for T {}
 
 /// Checks that the types are eq.
 ///
@@ -69,7 +73,7 @@ impl<T, U> CompileEq<U, NotEq> for T {}
 /// ```
 pub fn assert_types_eq<T, U>()
 where
-    T: CompileEq<U, Eq>,
+    T: CompileEq<U, TypesEq>,
 {
 }
 
@@ -90,5 +94,6 @@ where
 pub fn assert_types_not_eq<T, U, BecauseTypesMustBeNotEq>()
 where
     T: CompileEq<U, BecauseTypesMustBeNotEq>,
+    BecauseTypesMustBeNotEq: CompileEqResult
 {
 }
