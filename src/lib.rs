@@ -16,37 +16,11 @@
 //! assert_types_not_eq::<i32, i32, _>();
 //! ```
 //!
-//! You can use a trait for checking of equality instead:
-//! ```rust
-//! use compile_type_eq::*;
-//!
-//! fn do_some_when_not_eq<T, U, BecauseTypesMustBeNotEq>(t: T, u: U) -> String
-//! where
-//!     T: CompileEq<U, BecauseTypesMustBeNotEq>,
-//!     BecauseTypesMustBeNotEq: CompileEqResult
-//! {
-//!     "Some".to_string()
-//! }
-//!
-//! do_some_when_not_eq(1, "a");
-//! ```
-//!
-//! ```compile_fail
-//! use compile_type_eq::*;
-//!
-//! fn do_some_when_not_eq<T, U, BecauseTypesMustBeNotEq>(t: T, u: U) -> String
-//! where
-//!     T: CompileEq<U, BecauseTypesMustBeNotEq>,
-//!     BecauseTypesMustBeNotEq: CompileEqResult
-//! {
-//!     "Some".to_string()
-//! }
-//!
-//! do_some_when_not_eq("a", "b");
-//! ```
+//! For more complicated examples see [examples folder](https://github.com/p0lunin/compile_type_eq/tree/master/examples)
 
-pub use structs::{TypesEq, CompileEqResult};
+pub use structs::{CompileEqResult, TypesEq};
 
+pub mod how_it_works;
 mod structs;
 
 use structs::TypesNotEq;
@@ -94,6 +68,6 @@ where
 pub fn assert_types_not_eq<T, U, BecauseTypesMustBeNotEq>()
 where
     T: CompileEq<U, BecauseTypesMustBeNotEq>,
-    BecauseTypesMustBeNotEq: CompileEqResult
+    BecauseTypesMustBeNotEq: CompileEqResult,
 {
 }
