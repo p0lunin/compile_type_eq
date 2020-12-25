@@ -1,0 +1,11 @@
+[package]
+name = "compile_type_eq"
+version = "0.1.0"
+authors = ["p0lunin <dmytro.polunin@gmail.com>"]
+edition = "2018"
+description = "Compile-time type equality checking"
+documentation = "https://docs.rs/compile_type_eq/"
+readme = "readme.md"
+license = "MIT"
+
+[dependencies]
